@@ -3,6 +3,7 @@
 import { Orbitron } from "next/font/google"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 const orbitron = Orbitron({ subsets: ['latin'], weight: ['400', '500', '600', '700', '800', '900'] })
 
@@ -26,8 +27,11 @@ export const Hero = () => {
               size="lg"
               variant="outline"
               className="border-white/50 hover:bg-white/10 bg-transparent text-white hover:text-white"
+              asChild
             >
-              Ver Demo
+              <Link href="https://admin.zona-gol.com" target="_blank" rel="noopener noreferrer">
+                Ver Demo
+              </Link>
             </Button>
           </div>
         </div>
