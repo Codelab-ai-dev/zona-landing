@@ -1,30 +1,107 @@
 "use client"
 
+import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 
-export const Header = () => {
+import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+import { useScrollSpy } from "@/hooks/use-scroll-spy"
+import type { HeaderContent } from "@/types/landing"
+
+interface HeaderProps {
+  content: HeaderContent
+}
+
+export const Header = ({ content }: HeaderProps) => {
+  const [isScrolled, setIsScrolled] = useState(false)
+  const sectionIds = useMemo(
+    () => content.navItems.map((item) => item.href.replace("#", "")),
+    [content.navItems]
+  )
+  const activeId = useScrollSpy(sectionIds, { rootMargin: "-40% 0px -40% 0px" })
+  const secondaryCta = useMemo<HeaderContent["primaryCta"] | null>(() => {
+    if (content.secondaryCta) return content.secondaryCta
+    if (content.demoUrl) {
+      return { label: "Ver demo", href: content.demoUrl }
+    }
+    return null
+  }, [content.demoUrl, content.secondaryCta])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 24)
+    }
+
+    handleScroll()
+    window.addEventListener("scroll", handleScroll)
+
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
   return (
-    <header className="bg-transparent backdrop-blur-md p-8">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          <div className="flex items-center">
-            <Image src="/images/zona-gol-logo.webp" alt="Zona-Gol" width={160} height={160} />
-          </div>
-          <nav className="hidden md:flex items-center space-x-8">
-            <Link href="#inicio" className="text-white hover:text-primary transition-colors">
-              Inicio
-            </Link>
-            <Link href="#caracteristicas" className="text-white hover:text-primary transition-colors">
-              Características
-            </Link>
-            <Link href="#precios" className="text-white hover:text-primary transition-colors">
-              Precios
-            </Link>
-            <Link href="#contacto" className="text-white hover:text-primary transition-colors">
-              Contacto
-            </Link>
+    <header
+      className={cn(
+        "fixed inset-x-0 top-0 z-50 transition-all",
+        "border-transparent bg-slate-950/10 py-12 backdrop-blur-sm",
+        isScrolled &&
+          "border-b border-white/10 bg-slate-950/80 shadow-lg shadow-slate-950/5 backdrop-blur-xl py-6"
+      )}
+    >
+      <div className="container mx-auto px-6 sm:px-8 lg:px-12">
+        <div className="flex h-12 items-center justify-between gap-4">
+          <Link href="#inicio" className="flex items-center">
+            <Image
+              src={content.logoSrc}
+              alt={content.logoAlt}
+              width={140}
+              height={140}
+              priority
+              className="h-auto w-[140px] md:w-[160px]"
+            />
+          </Link>
+          <nav className="hidden items-center gap-8 md:flex">
+            {content.navItems.map((item) => {
+              const itemId = item.href.replace("#", "")
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    "relative text-sm font-medium transition-colors",
+                    activeId === itemId ? "text-white" : "text-white/70 hover:text-white"
+                  )}
+                >
+                  <span>{item.label}</span>
+                  {activeId === itemId && (
+                    <span className="absolute inset-x-1 -bottom-2 h-0.5 rounded-full bg-white" />
+                  )}
+                </Link>
+              )
+            })}
           </nav>
+          <div className="flex items-center gap-2">
+            {secondaryCta && (
+              <Button
+                asChild
+                size="sm"
+                variant="ghost"
+                className="hidden text-white/80 transition-colors hover:bg-white/10 hover:text-white md:inline-flex"
+              >
+                <Link href={secondaryCta.href} target="_blank" rel="noopener noreferrer">
+                  {secondaryCta.label}
+                </Link>
+              </Button>
+            )}
+            <Button
+              asChild
+              size="sm"
+              className="bg-emerald-400/90 text-slate-950 shadow-lg shadow-emerald-400/20 transition hover:bg-emerald-300"
+            >
+              <Link href={content.primaryCta.href}>{content.primaryCta.label}</Link>
+            </Button>
+          </div>
         </div>
       </div>
     </header>
