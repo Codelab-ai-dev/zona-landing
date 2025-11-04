@@ -8,8 +8,20 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion"
+import type { HeroChecklistItem, HeroContent } from "@/types/landing"
 
-export const Hero = () => {
+interface HeroProps {
+  content: HeroContent
+}
+
+const statusToneClass: Record<HeroChecklistItem["tone"], string> = {
+  success: "border-emerald-500/30 bg-emerald-500/15 text-emerald-100",
+  info: "border-cyan-500/30 bg-cyan-500/15 text-cyan-100",
+  warning: "border-amber-500/40 bg-amber-500/15 text-amber-100",
+  neutral: "border-white/20 bg-white/10 text-white/80",
+}
+
+export const Hero = ({ content }: HeroProps) => {
   const heroRef = useRef<HTMLElement | null>(null)
   const prefersReducedMotion = usePrefersReducedMotion()
   const [parallaxOffset, setParallaxOffset] = useState(0)
@@ -64,15 +76,8 @@ export const Hero = () => {
         className="absolute inset-0 -z-10 transform-gpu transition-transform duration-500 ease-out"
         style={{ transform: `translate3d(0, ${parallaxOffset}%, 0)` }}
       >
-        <video
-          className="h-full w-full object-cover"
-          autoPlay
-          loop
-          muted
-          playsInline
-          poster="/images/football-field-bg.png"
-        >
-          <source src="/videos/hero.mp4" type="video/mp4" />
+        <video className="h-full w-full object-cover" autoPlay loop muted playsInline poster={content.video.poster}>
+          <source src={content.video.src} type="video/mp4" />
         </video>
         <div
           className="absolute inset-0 bg-slate-950 transition-opacity duration-500 ease-out"
@@ -95,26 +100,23 @@ export const Hero = () => {
               <span className="inline-flex size-6 items-center justify-center rounded-full bg-white/20">
                 <Trophy className="size-3.5" />
               </span>
-              Temporada 2025 · Todo tu torneo en una vista
+              {content.badge}
             </Badge>
             <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl">
-              <span className="block text-balance font-serif text-primary">Organiza tu liga</span>
+              <span className="block text-balance font-serif text-primary">{content.titleLead}</span>
               <span className="mt-2 block text-balance font-semibold leading-tight text-white">
-                con la plataforma oficial de Zona-Gol
+                {content.titleHighlight}
               </span>
             </h1>
-            <p className="mt-6 max-w-xl text-lg text-white/80 sm:text-xl">
-              Programa jornadas, confirma árbitros y comparte resultados en un tablero moderno que todo tu equipo
-              entiende al instante.
-            </p>
+            <p className="mt-6 max-w-xl text-lg text-white/80 sm:text-xl">{content.description}</p>
             <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
               <Button
                 size="lg"
                 className="group bg-primary text-primary-foreground shadow-[0_20px_45px_-28px_rgba(16,185,129,0.9)] transition-all hover:translate-y-0.5 hover:bg-primary/90"
                 asChild
               >
-                <Link href="#contacto">
-                  Solicitar demo en vivo
+                <Link href={content.primaryAction.href}>
+                  {content.primaryAction.label}
                   <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
                 </Link>
               </Button>
@@ -124,30 +126,29 @@ export const Hero = () => {
                 className="bg-white/10 text-white backdrop-blur-md transition-all hover:bg-white/20 hover:shadow-[0_20px_40px_-24px_rgba(15,23,42,0.6)]"
                 asChild
               >
-                <Link href="https://admin.zona-gol.com" target="_blank" rel="noopener noreferrer">
+                <Link href={content.secondaryAction.href} target="_blank" rel="noopener noreferrer">
                   <PlayCircle className="size-5" />
-                  Ver demo interactiva
+                  {content.secondaryAction.label}
                 </Link>
               </Button>
             </div>
             <div className="mt-10 flex w-full flex-wrap items-center justify-center gap-4 lg:justify-start">
-              <div className="flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm text-white/80 backdrop-blur-md transition hover:border-white/20 hover:bg-white/10">
-                <span className="text-lg font-semibold text-white">4.5K</span>
-                Partidos automatizados cada mes
-              </div>
-              <div className="flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm text-white/80 backdrop-blur-md transition hover:border-white/20 hover:bg-white/10">
-                <span className="text-lg font-semibold text-white">35K</span>
-                Usuarios conectados en vivo
-              </div>
+              {content.stats.map((stat) => (
+                <div
+                  key={stat.label}
+                  className="flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm text-white/80 backdrop-blur-md transition hover:border-white/20 hover:bg-white/10"
+                >
+                  <span className="text-lg font-semibold text-white">{stat.value}</span>
+                  {stat.label}
+                </div>
+              ))}
             </div>
           </div>
 
           <Card className="relative overflow-hidden border-white/10 bg-white/10 text-white shadow-2xl backdrop-blur-xl transition hover:border-primary/40 hover:shadow-[0_25px_65px_-28px_rgba(20,184,166,0.55)]">
             <div className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-emerald-400/20 blur-3xl" />
             <CardHeader className="pb-6">
-              <CardTitle className="text-2xl font-semibold text-white">
-                Tu siguiente jornada en orden
-              </CardTitle>
+              <CardTitle className="text-2xl font-semibold text-white">{content.schedule.title}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 text-sm text-white/80">
               <div className="flex items-center gap-4 rounded-xl border border-white/10 bg-white/5 p-4">
@@ -155,21 +156,25 @@ export const Hero = () => {
                   <Calendar className="size-5" />
                 </div>
                 <div className="space-y-1">
-                  <p className="text-xs uppercase tracking-[0.25em] text-white/60">Próximo partido</p>
-                  <p className="text-base font-semibold text-white">Sábado · 18:00 · Estadio Central</p>
+                  <p className="text-xs uppercase tracking-[0.25em] text-white/60">{content.schedule.matchLabel}</p>
+                  <p className="text-base font-semibold text-white">{content.schedule.matchValue}</p>
                 </div>
               </div>
               <div className="rounded-xl border border-white/10 bg-white/5 p-4">
                 <p className="text-xs uppercase tracking-[0.25em] text-white/60">Checklist rápido</p>
                 <ul className="mt-3 space-y-2">
-                  <li className="flex items-center justify-between">
-                    <span>Árbitros confirmados</span>
-                    <span className="rounded-full bg-emerald-400/15 px-3 py-1 text-emerald-100">Listo</span>
-                  </li>
-                  <li className="flex items-center justify-between">
-                    <span>Notificaciones enviadas</span>
-                    <span className="rounded-full bg-emerald-400/15 px-3 py-1 text-emerald-100">OK</span>
-                  </li>
+                  {content.schedule.checklist.map((item) => (
+                    <li key={item.label} className="flex items-center justify-between">
+                      <span>{item.label}</span>
+                      <span
+                        className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                          statusToneClass[item.tone] ?? statusToneClass.neutral
+                        }`}
+                      >
+                        {item.statusLabel}
+                      </span>
+                    </li>
+                  ))}
                 </ul>
               </div>
               <Button
@@ -178,7 +183,7 @@ export const Hero = () => {
                 className="w-full border-white/40 bg-white/10 text-white transition hover:border-primary/50 hover:bg-primary/10"
                 asChild
               >
-                <Link href="#contacto">Agendar una demo guiada</Link>
+                <Link href={content.primaryAction.href}>{content.primaryAction.label}</Link>
               </Button>
             </CardContent>
           </Card>

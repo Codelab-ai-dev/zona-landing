@@ -6,15 +6,20 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
+import type { ContactContent } from "@/types/landing"
 
-export const ContactForm = () => {
+type FormContent = ContactContent["form"]
+
+interface ContactFormProps {
+  form: FormContent
+}
+
+export const ContactForm = ({ form }: ContactFormProps) => {
   return (
     <Card className="border border-border/40 bg-background/85 shadow-[0_25px_60px_-40px_rgba(94,234,212,0.6)] backdrop-blur-2xl">
       <CardHeader>
-        <CardTitle className="text-2xl font-semibold text-foreground">Envíanos un mensaje</CardTitle>
-        <CardDescription className="text-sm text-muted-foreground">
-          Comparte los detalles de tu liga y te responderemos con un plan personalizado en menos de 24 horas.
-        </CardDescription>
+        <CardTitle className="text-2xl font-semibold text-foreground">{form.title}</CardTitle>
+        <CardDescription className="text-sm text-muted-foreground">{form.description}</CardDescription>
       </CardHeader>
       <CardContent>
         <form className="space-y-6">
@@ -95,10 +100,7 @@ export const ContactForm = () => {
             Enviar Mensaje
             <ChevronRight className="ml-2 h-4 w-4" />
           </Button>
-          <p className="text-xs text-muted-foreground">
-            Resolvemos dudas técnicas y administrativas. También podemos coordinar una sesión con tu staff en menos de
-            48 horas.
-          </p>
+          <p className="text-xs text-muted-foreground">{form.footer}</p>
         </form>
       </CardContent>
     </Card>

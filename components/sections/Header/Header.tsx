@@ -7,21 +7,26 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { useScrollSpy } from "@/hooks/use-scroll-spy"
+import type { HeaderContent } from "@/types/landing"
 
-const NAV_ITEMS = [
-  { href: "#inicio", label: "Inicio" },
-  { href: "#caracteristicas", label: "Características" },
-  { href: "#precios", label: "Precios" },
-  { href: "#contacto", label: "Contacto" },
-]
+interface HeaderProps {
+  content: HeaderContent
+}
 
-export const Header = () => {
+export const Header = ({ content }: HeaderProps) => {
   const [isScrolled, setIsScrolled] = useState(false)
   const sectionIds = useMemo(
-    () => NAV_ITEMS.map((item) => item.href.replace("#", "")),
-    []
+    () => content.navItems.map((item) => item.href.replace("#", "")),
+    [content.navItems]
   )
   const activeId = useScrollSpy(sectionIds, { rootMargin: "-40% 0px -40% 0px" })
+  const secondaryCta = useMemo<HeaderContent["primaryCta"] | null>(() => {
+    if (content.secondaryCta) return content.secondaryCta
+    if (content.demoUrl) {
+      return { label: "Ver demo", href: content.demoUrl }
+    }
+    return null
+  }, [content.demoUrl, content.secondaryCta])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -47,8 +52,8 @@ export const Header = () => {
         <div className="flex h-12 items-center justify-between gap-4">
           <Link href="#inicio" className="flex items-center">
             <Image
-              src="/images/zona-gol-logo.webp"
-              alt="Zona-Gol"
+              src={content.logoSrc}
+              alt={content.logoAlt}
               width={140}
               height={140}
               priority
@@ -56,7 +61,7 @@ export const Header = () => {
             />
           </Link>
           <nav className="hidden items-center gap-8 md:flex">
-            {NAV_ITEMS.map((item) => {
+            {content.navItems.map((item) => {
               const itemId = item.href.replace("#", "")
 
               return (
@@ -65,9 +70,7 @@ export const Header = () => {
                   href={item.href}
                   className={cn(
                     "relative text-sm font-medium transition-colors",
-                    activeId === itemId
-                      ? "text-white"
-                      : "text-white/70 hover:text-white"
+                    activeId === itemId ? "text-white" : "text-white/70 hover:text-white"
                   )}
                 >
                   <span>{item.label}</span>
@@ -79,22 +82,24 @@ export const Header = () => {
             })}
           </nav>
           <div className="flex items-center gap-2">
-            <Button
-              asChild
-              size="sm"
-              variant="ghost"
-              className="hidden text-white/80 transition-colors hover:bg-white/10 hover:text-white md:inline-flex"
-            >
-              <Link href="https://admin.zona-gol.com" target="_blank" rel="noopener noreferrer">
-                Ver demo
-              </Link>
-            </Button>
+            {secondaryCta && (
+              <Button
+                asChild
+                size="sm"
+                variant="ghost"
+                className="hidden text-white/80 transition-colors hover:bg-white/10 hover:text-white md:inline-flex"
+              >
+                <Link href={secondaryCta.href} target="_blank" rel="noopener noreferrer">
+                  {secondaryCta.label}
+                </Link>
+              </Button>
+            )}
             <Button
               asChild
               size="sm"
               className="bg-emerald-400/90 text-slate-950 shadow-lg shadow-emerald-400/20 transition hover:bg-emerald-300"
             >
-              <Link href="#contacto">Solicitar demo</Link>
+              <Link href={content.primaryCta.href}>{content.primaryCta.label}</Link>
             </Button>
           </div>
         </div>

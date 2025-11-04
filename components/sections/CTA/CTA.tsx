@@ -17,8 +17,13 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import type { CtaContent } from "@/types/landing"
 
-export const CTA = () => {
+interface CTAProps {
+  content: CtaContent
+}
+
+export const CTA = ({ content }: CTAProps) => {
   const [calendarOpen, setCalendarOpen] = useState(false)
   const [submitted, setSubmitted] = useState(false)
 
@@ -43,35 +48,27 @@ export const CTA = () => {
           <div className="mx-auto flex w-full max-w-3xl flex-col justify-center text-center lg:mx-0 lg:text-left">
             <Badge className="mb-5 inline-flex w-fit items-center gap-2 border-primary/30 bg-primary/10 text-primary">
               <ShieldCheck className="size-4" />
-              Respuesta media en 90 minutos
+              {content.badge}
             </Badge>
-            <h2 className="text-3xl font-semibold text-foreground sm:text-4xl">
-              Diseñamos contigo la próxima temporada de tu liga
-            </h2>
-            <p className="mt-4 text-lg text-muted-foreground/80 sm:text-xl">
-              Completa el formulario express y un especialista deportivo te compartirá un playbook personalizado con
-              calendario, roles de staff y reportes automatizados.
-            </p>
+            <h2 className="text-3xl font-semibold text-foreground sm:text-4xl">{content.title}</h2>
+            <p className="mt-4 text-lg text-muted-foreground/80 sm:text-xl">{content.description}</p>
             <ul className="mt-8 grid gap-4 text-left sm:grid-cols-2">
-              {["Kick-off en menos de 48h", "Onboarding asistido para tu staff", "Reportes en tiempo real", "Soporte humano en español"]
-                .map((benefit) => (
-                  <li
-                    key={benefit}
-                    className="group flex items-center gap-3 rounded-2xl border border-border/40 bg-white/5 px-4 py-3 text-sm text-foreground/80 backdrop-blur-lg transition hover:border-primary/60 hover:bg-primary/10 hover:text-foreground"
-                  >
-                    <span className="flex size-8 items-center justify-center rounded-full border border-primary/40 bg-primary/15 text-primary transition group-hover:border-primary group-hover:bg-primary/20">
-                      <Check className="size-4" />
-                    </span>
-                    {benefit}
-                  </li>
-                ))}
+              {content.benefits.map((benefit) => (
+                <li
+                  key={benefit}
+                  className="group flex items-center gap-3 rounded-2xl border border-border/40 bg-white/5 px-4 py-3 text-sm text-foreground/80 backdrop-blur-lg transition hover:border-primary/60 hover:bg-primary/10 hover:text-foreground"
+                >
+                  <span className="flex size-8 items-center justify-center rounded-full border border-primary/40 bg-primary/15 text-primary transition group-hover:border-primary group-hover:bg-primary/20">
+                    <Check className="size-4" />
+                  </span>
+                  {benefit}
+                </li>
+              ))}
             </ul>
             <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
               <div className="flex items-center gap-3 rounded-full border border-border/40 bg-background/50 px-4 py-3 text-sm text-muted-foreground/80 backdrop-blur-xl">
                 <Users className="size-4 text-primary" />
-                <span>
-                  120+ ligas migradas en 2024 con equipo dedicado
-                </span>
+                <span>{content.leadStat}</span>
               </div>
               <Dialog open={calendarOpen} onOpenChange={setCalendarOpen}>
                 <DialogTrigger asChild>
@@ -85,17 +82,13 @@ export const CTA = () => {
                 </DialogTrigger>
                 <DialogContent className="max-w-2xl overflow-hidden border-border/40 bg-background/95 p-0 backdrop-blur-xl">
                   <DialogHeader className="space-y-2 px-6 pt-6 text-left">
-                    <DialogTitle className="text-2xl font-semibold text-foreground">
-                      Agenda una demo guiada
-                    </DialogTitle>
-                    <DialogDescription className="text-muted-foreground">
-                      Selecciona un horario para conectar con nuestro equipo de implementación.
-                    </DialogDescription>
+                    <DialogTitle className="text-2xl font-semibold text-foreground">{content.calendarTitle}</DialogTitle>
+                    <DialogDescription className="text-muted-foreground">{content.calendarDescription}</DialogDescription>
                   </DialogHeader>
                   <div className="aspect-video w-full bg-muted/30">
                     <iframe
-                      title="Calendario de demos Zona-Gol"
-                      src="https://calendly.com/zona-gol/demo?hide_event_type_details=1&hide_gdpr_banner=1"
+                      title={content.calendarTitle}
+                      src={content.calendarUrl}
                       className="size-full"
                       loading="lazy"
                       referrerPolicy="no-referrer"
@@ -103,16 +96,19 @@ export const CTA = () => {
                     />
                   </div>
                   <div className="flex items-center justify-between px-6 py-4 text-xs text-muted-foreground">
-                    <span>Tiempo estimado: 25 minutos</span>
-                    <span>Sin costo y sin tarjeta</span>
+                    <span>{content.calendarDuration}</span>
+                    <span>{content.calendarCost}</span>
                   </div>
                 </DialogContent>
               </Dialog>
             </div>
             <p className="mt-6 text-sm text-muted-foreground">
               ¿Prefieres escribirnos? Envíanos un correo a
-              <a href="mailto:soporte@zona-gol.com" className="ml-2 inline-flex items-center text-primary underline-offset-4 hover:underline">
-                soporte@zona-gol.com
+              <a
+                href={`mailto:${content.supportEmail}`}
+                className="ml-2 inline-flex items-center text-primary underline-offset-4 hover:underline"
+              >
+                {content.supportEmail}
               </a>
             </p>
           </div>
@@ -121,10 +117,8 @@ export const CTA = () => {
             <div className="pointer-events-none absolute -top-24 right-0 h-64 w-64 rounded-full bg-primary/20 blur-3xl" />
             <div className="pointer-events-none absolute bottom-0 left-0 h-56 w-56 rounded-full bg-secondary/10 blur-3xl" />
             <div className="relative">
-              <h3 className="text-2xl font-semibold text-foreground">Reserva tu espacio</h3>
-              <p className="mt-2 text-sm text-muted-foreground">
-                Déjanos tu información y bloqueamos un cupo para mostrarte el panel de Zona-Gol en vivo.
-              </p>
+              <h3 className="text-2xl font-semibold text-foreground">{content.formTitle}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">{content.formDescription}</p>
               <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
                 <div className="space-y-2">
                   <Label htmlFor="cta-name" className="text-sm font-medium text-foreground">
@@ -164,9 +158,7 @@ export const CTA = () => {
                   Guardamos tus datos siguiendo estándares GDPR.
                 </div>
                 {submitted && (
-                  <p className="text-sm font-medium text-primary">
-                    ¡Gracias! Nuestro equipo te contactará en las próximas horas.
-                  </p>
+                  <p className="text-sm font-medium text-primary">{content.formSuccess}</p>
                 )}
               </form>
             </div>

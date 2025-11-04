@@ -9,216 +9,45 @@ import {
   Megaphone,
   Target,
   UploadCloud,
-  UserPlus
+  UserPlus,
+  type LucideIcon,
 } from "lucide-react"
-import { type LucideIcon } from "lucide-react"
 
 import FeatureCard from "./FeatureCard"
 import { cn } from "@/lib/utils"
+import type { FeatureIcon, FeaturesContent, StageMockupItem } from "@/types/landing"
 
-interface StageBenefit {
-  icon: LucideIcon
-  title: string
-  description: string
-  accent: string
-}
-
-interface StageMockupItem {
-  title: string
-  description: string
-  status?: string
-  statusClass?: string
-}
-
-interface Stage {
-  id: string
-  step: string
-  label: string
-  title: string
-  description: string
-  accent: string
-  icon: LucideIcon
-  benefits: StageBenefit[]
-  mockup: {
-    badge: string
-    title: string
-    accent: string
-    items: StageMockupItem[]
-  }
+const ICON_MAP: Record<FeatureIcon, LucideIcon> = {
+  UserPlus,
+  ClipboardList,
+  UploadCloud,
+  CalendarCheck,
+  GitBranch,
+  Megaphone,
+  LineChart,
+  BarChart3,
+  Target,
 }
 
 const statusBaseClass =
   "rounded-full border px-3 py-1 text-xs font-semibold tracking-wide uppercase"
 
-const stages: Stage[] = [
-  {
-    id: "onboarding",
-    step: "01",
-    label: "Onboarding guiado",
-    title: "Incorpora clubes, staff y jugadores sin fricciones",
-    description:
-      "Convierte el proceso de alta en una experiencia asistida. Plantillas, reglamentos y pagos quedan ordenados desde el primer día para que la temporada empiece con todos sincronizados.",
-    accent: "from-emerald-400/60 via-cyan-400/25 to-transparent",
-    icon: UserPlus,
-    benefits: [
-      {
-        icon: ClipboardList,
-        title: "Convocatorias automáticas",
-        description:
-          "Envía invitaciones personalizadas y recordatorios sin manejar hojas de cálculo ni chats interminables.",
-        accent: "from-emerald-400/35 via-emerald-500/10 to-transparent"
-      },
-      {
-        icon: UploadCloud,
-        title: "Importa padrones en segundos",
-        description:
-          "Carga listas masivas de jugadores o cuerpos técnicos y valida documentos con un clic.",
-        accent: "from-cyan-400/35 via-cyan-500/10 to-transparent"
-      }
-    ],
-    mockup: {
-      badge: "Checklist activo",
-      title: "Panel de incorporación",
-      accent: "from-emerald-400/55 via-cyan-400/25 to-transparent",
-      items: [
-        {
-          title: "Registro de clubes",
-          description: "8/8 plantillas aprobadas",
-          status: "Completo",
-          statusClass: "border-emerald-500/30 bg-emerald-500/15 text-emerald-300"
-        },
-        {
-          title: "Documentación",
-          description: "Verificación automática de credenciales",
-          status: "En revisión",
-          statusClass: "border-cyan-500/30 bg-cyan-500/15 text-cyan-200"
-        },
-        {
-          title: "Pagos iniciales",
-          description: "Recordatorio programado para mañana",
-          status: "Pendiente",
-          statusClass: "border-amber-500/40 bg-amber-500/15 text-amber-200"
-        }
-      ]
-    }
-  },
-  {
-    id: "management",
-    step: "02",
-    label: "Gestión operativa",
-    title: "Programa fixtures y mantén a todos alineados",
-    description:
-      "Automatiza calendarios, reasignaciones y notificaciones. Zona-Gol te ayuda a tomar decisiones sobre escenarios reales en cuestión de minutos.",
-    accent: "from-indigo-400/60 via-sky-400/25 to-transparent",
-    icon: CalendarCheck,
-    benefits: [
-      {
-        icon: GitBranch,
-        title: "Reasignaciones inteligentes",
-        description:
-          "Arrastra y suelta encuentros; la plataforma resuelve canchas, árbitros y horarios compatibles.",
-        accent: "from-indigo-400/35 via-indigo-500/10 to-transparent"
-      },
-      {
-        icon: Megaphone,
-        title: "Alertas contextuales",
-        description:
-          "Equipos y staff reciben comunicaciones automáticas y confirmaciones por canal preferido.",
-        accent: "from-sky-400/35 via-sky-500/10 to-transparent"
-      }
-    ],
-    mockup: {
-      badge: "Agenda dinámica",
-      title: "Gestor de jornadas",
-      accent: "from-sky-400/55 via-indigo-400/25 to-transparent",
-      items: [
-        {
-          title: "Fixture de apertura",
-          description: "14 partidos sincronizados",
-          status: "Auto",
-          statusClass: "border-sky-500/40 bg-sky-500/15 text-sky-200"
-        },
-        {
-          title: "Asignación arbitral",
-          description: "Cobertura confirmada para 100% de encuentros",
-          status: "Confirmado",
-          statusClass: "border-indigo-500/30 bg-indigo-500/15 text-indigo-200"
-        },
-        {
-          title: "Alertas",
-          description: "3 reprogramaciones comunicadas",
-          status: "Enviado",
-          statusClass: "border-cyan-500/30 bg-cyan-500/15 text-cyan-200"
-        }
-      ]
-    }
-  },
-  {
-    id: "analytics",
-    step: "03",
-    label: "Analítica accionable",
-    title: "Transforma datos en decisiones competitivas",
-    description:
-      "Sigue métricas clave, rendimiento y tendencias económicas para optimizar la liga en tiempo real y escalar nuevas competencias.",
-    accent: "from-purple-400/60 via-fuchsia-400/25 to-transparent",
-    icon: LineChart,
-    benefits: [
-      {
-        icon: BarChart3,
-        title: "Dashboards personalizados",
-        description:
-          "Combina KPIs deportivos y administrativos con filtros por torneo, categoría o jornada.",
-        accent: "from-purple-400/35 via-purple-500/10 to-transparent"
-      },
-      {
-        icon: Target,
-        title: "Proyecciones claras",
-        description:
-          "Anticipa recaudaciones, asistencia y desempeño gracias a pronósticos automáticos.",
-        accent: "from-fuchsia-400/35 via-fuchsia-500/10 to-transparent"
-      }
-    ],
-    mockup: {
-      badge: "Insights en vivo",
-      title: "Panel de analítica",
-      accent: "from-fuchsia-400/55 via-purple-400/25 to-transparent",
-      items: [
-        {
-          title: "Engagement de aficionados",
-          description: "↑ 22% visitas semanales",
-          status: "Destacado",
-          statusClass: "border-fuchsia-500/30 bg-fuchsia-500/15 text-fuchsia-200"
-        },
-        {
-          title: "Ingresos de taquilla",
-          description: "USD 48K proyectados",
-          status: "Nuevo",
-          statusClass: "border-purple-500/30 bg-purple-500/15 text-purple-200"
-        },
-        {
-          title: "Top performers",
-          description: "Reporte enviado a directores técnicos",
-          status: "Listo",
-          statusClass: "border-emerald-500/30 bg-emerald-500/15 text-emerald-200"
-        }
-      ]
-    }
-  }
-]
+const toneClasses: Record<NonNullable<StageMockupItem["tone"]>, string> = {
+  success: "border-emerald-500/30 bg-emerald-500/15 text-emerald-200",
+  info: "border-cyan-500/30 bg-cyan-500/15 text-cyan-200",
+  warning: "border-amber-500/40 bg-amber-500/15 text-amber-200",
+  neutral: "border-white/20 bg-white/10 text-white/70",
+}
 
-const StageVisual = ({
-  icon: Icon,
-  accent,
-  badge,
-  title,
-  items
-}: {
+interface StageVisualProps {
   icon: LucideIcon
   accent: string
   badge: string
   title: string
   items: StageMockupItem[]
-}) => {
+}
+
+const StageVisual = ({ icon: Icon, accent, badge, title, items }: StageVisualProps) => {
   return (
     <div className="relative w-full max-w-2xl">
       <div
@@ -255,8 +84,15 @@ const StageVisual = ({
                 <p className="text-sm font-semibold text-foreground">{item.title}</p>
                 <p className="text-xs text-muted-foreground">{item.description}</p>
               </div>
-              {item.status ? (
-                <span className={cn(statusBaseClass, item.statusClass)}>{item.status}</span>
+              {item.statusLabel ? (
+                <span
+                  className={cn(
+                    statusBaseClass,
+                    item.tone ? toneClasses[item.tone] : toneClasses.neutral
+                  )}
+                >
+                  {item.statusLabel}
+                </span>
               ) : null}
             </div>
           ))}
@@ -266,22 +102,22 @@ const StageVisual = ({
   )
 }
 
-export const Features = () => {
+interface FeaturesProps {
+  content: FeaturesContent
+}
+
+export const Features = ({ content }: FeaturesProps) => {
   return (
     <section id="caracteristicas" className="py-24 bg-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <p className="text-sm font-semibold uppercase tracking-[0.32em] text-primary/80">Un flujo diseñado para ligas modernas</p>
-          <h2 className="mt-4 text-3xl md:text-4xl font-bold text-foreground">
-            Una plataforma que acompaña todo el ciclo de tu competencia
-          </h2>
-          <p className="mt-4 text-xl text-muted-foreground max-w-3xl mx-auto">
-            Del onboarding de clubes a la toma de decisiones estratégicas, Zona-Gol guía cada paso con contexto, claridad y automatización.
-          </p>
+          <p className="text-sm font-semibold uppercase tracking-[0.32em] text-primary/80">{content.eyebrow}</p>
+          <h2 className="mt-4 text-3xl md:text-4xl font-bold text-foreground">{content.heading}</h2>
+          <p className="mt-4 text-xl text-muted-foreground max-w-3xl mx-auto">{content.description}</p>
         </div>
 
         <div className="mt-20 space-y-24">
-          {stages.map((stage, index) => {
+          {content.stages.map((stage, index) => {
             const isReversed = index % 2 === 1
 
             return (
@@ -302,7 +138,7 @@ export const Features = () => {
                     {stage.benefits.map((benefit) => (
                       <FeatureCard
                         key={benefit.title}
-                        icon={benefit.icon}
+                        icon={ICON_MAP[benefit.icon]}
                         title={benefit.title}
                         description={benefit.description}
                         accent={benefit.accent}
@@ -313,7 +149,7 @@ export const Features = () => {
                 </div>
                 <div className={cn("w-full lg:w-7/12", isReversed && "lg:order-1")}> 
                   <StageVisual
-                    icon={stage.icon}
+                    icon={ICON_MAP[stage.icon]}
                     accent={stage.accent}
                     badge={stage.mockup.badge}
                     title={stage.mockup.title}
@@ -323,6 +159,11 @@ export const Features = () => {
               </div>
             )
           })}
+        </div>
+
+        <div className="mt-20 text-center">
+          <h3 className="text-2xl font-semibold text-foreground">{content.closing.title}</h3>
+          <p className="mt-4 text-lg text-muted-foreground max-w-3xl mx-auto">{content.closing.description}</p>
         </div>
       </div>
     </section>
