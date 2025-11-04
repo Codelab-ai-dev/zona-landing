@@ -1,13 +1,26 @@
-import type { Metadata } from 'next'
-import { GeistSans } from 'geist/font/sans'
-import { GeistMono } from 'geist/font/mono'
-import { Analytics } from '@vercel/analytics/next'
-import './globals.css'
+import type { Metadata } from "next"
+import { Analytics } from "@vercel/analytics/next"
+import { Plus_Jakarta_Sans, Playfair_Display } from "next/font/google"
+
+import "./globals.css"
+
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-plus-jakarta",
+  display: "swap",
+})
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair",
+  display: "swap",
+})
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
-  generator: 'v0.app',
+  title: "Zona-Gol · Plataforma para gestionar ligas deportivas",
+  description:
+    "Organiza calendarios, arbitrajes y comunicación de tu liga con Zona-Gol, la plataforma integral para torneos deportivos.",
+  generator: "v0.app",
 }
 
 export default function RootLayout({
@@ -16,8 +29,10 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
+    <html lang="es">
+      <body
+        className={`${plusJakarta.variable} ${playfair.variable} font-sans antialiased bg-background text-foreground`}
+      >
         {children}
         <Analytics />
       </body>

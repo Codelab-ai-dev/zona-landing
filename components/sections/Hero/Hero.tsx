@@ -1,23 +1,30 @@
 "use client"
 
+import { useRef } from "react"
 import Link from "next/link"
-import { Orbitron, Playfair_Display } from "next/font/google"
+import { motion, useScroll, useTransform } from "framer-motion"
+import { Playfair_Display } from "next/font/google"
 import { ArrowRight, Calendar, PlayCircle, Trophy } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
-const orbitron = Orbitron({ subsets: ["latin"], weight: ["500", "600", "700", "800", "900"] })
 const playfair = Playfair_Display({ subsets: ["latin"], weight: ["600", "700"] })
 
 export const Hero = () => {
+  const heroRef = useRef<HTMLElement | null>(null)
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] })
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "24%"])
+  const vignetteOpacity = useTransform(scrollYProgress, [0, 1], [0.55, 0.75])
+
   return (
     <section
       id="inicio"
+      ref={heroRef}
       className="relative isolate overflow-hidden pt-36 pb-24 text-white sm:pt-40 lg:pb-32"
     >
-      <div className="absolute inset-0 -z-10">
+      <motion.div className="absolute inset-0 -z-10" style={{ y: backgroundY }}>
         <video
           className="h-full w-full object-cover"
           autoPlay
@@ -28,10 +35,19 @@ export const Hero = () => {
         >
           <source src="/videos/hero.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-slate-950/80" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(15,118,110,0.35),_transparent_55%)]" />
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/40 via-slate-950/65 to-slate-950/90" />
-      </div>
+        <motion.div
+          className="absolute inset-0 bg-slate-950"
+          style={{ opacity: vignetteOpacity }}
+        />
+        <motion.div
+          className="absolute inset-0"
+          aria-hidden="true"
+          style={{ opacity: vignetteOpacity }}
+        >
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(34,211,238,0.3),_transparent_55%)]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/40 via-slate-950/65 to-slate-950/90" />
+        </motion.div>
+      </motion.div>
 
       <div className="container relative mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid gap-16 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-20">
@@ -43,9 +59,9 @@ export const Hero = () => {
               Temporada 2025 · Todo tu torneo en una vista
             </Badge>
             <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl">
-              <span className={`${playfair.className} block text-balance text-emerald-200/90`}>Organiza tu liga</span>
-              <span className="mt-2 block text-balance font-bold leading-tight">
-                con la plataforma oficial de <span className={orbitron.className}>Zona-Gol</span>
+              <span className={`${playfair.className} block text-balance text-primary`}>Organiza tu liga</span>
+              <span className="mt-2 block text-balance font-semibold leading-tight text-white">
+                con la plataforma oficial de Zona-Gol
               </span>
             </h1>
             <p className="mt-6 max-w-xl text-lg text-white/80 sm:text-xl">
@@ -55,7 +71,7 @@ export const Hero = () => {
             <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
               <Button
                 size="lg"
-                className="group bg-white text-slate-950 shadow-lg hover:bg-white/90"
+                className="group bg-primary text-primary-foreground shadow-[0_20px_45px_-28px_rgba(16,185,129,0.9)] transition-all hover:translate-y-0.5 hover:bg-primary/90"
                 asChild
               >
                 <Link href="#contacto">
@@ -66,7 +82,7 @@ export const Hero = () => {
               <Button
                 size="lg"
                 variant="ghost"
-                className="bg-white/10 text-white backdrop-blur-md transition hover:bg-white/20"
+                className="bg-white/10 text-white backdrop-blur-md transition-all hover:bg-white/20 hover:shadow-[0_20px_40px_-24px_rgba(15,23,42,0.6)]"
                 asChild
               >
                 <Link href="https://admin.zona-gol.com" target="_blank" rel="noopener noreferrer">
@@ -76,18 +92,18 @@ export const Hero = () => {
               </Button>
             </div>
             <div className="mt-10 flex w-full flex-wrap items-center justify-center gap-4 lg:justify-start">
-              <div className="flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm text-white/80">
+              <div className="flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm text-white/80 backdrop-blur-md transition hover:border-white/20 hover:bg-white/10">
                 <span className="text-lg font-semibold text-white">4.5K</span>
                 Partidos automatizados cada mes
               </div>
-              <div className="flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm text-white/80">
+              <div className="flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm text-white/80 backdrop-blur-md transition hover:border-white/20 hover:bg-white/10">
                 <span className="text-lg font-semibold text-white">35K</span>
                 Usuarios conectados en vivo
               </div>
             </div>
           </div>
 
-          <Card className="relative overflow-hidden border-white/10 bg-white/10 text-white shadow-2xl backdrop-blur-xl">
+          <Card className="relative overflow-hidden border-white/10 bg-white/10 text-white shadow-2xl backdrop-blur-xl transition hover:border-primary/40 hover:shadow-[0_25px_65px_-28px_rgba(20,184,166,0.55)]">
             <div className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-emerald-400/20 blur-3xl" />
             <CardHeader className="pb-6">
               <CardTitle className="text-2xl font-semibold text-white">
@@ -120,7 +136,7 @@ export const Hero = () => {
               <Button
                 size="lg"
                 variant="outline"
-                className="w-full border-white/40 bg-white/10 text-white hover:bg-white/20"
+                className="w-full border-white/40 bg-white/10 text-white transition hover:border-primary/50 hover:bg-primary/10"
                 asChild
               >
                 <Link href="#contacto">Agendar una demo guiada</Link>
