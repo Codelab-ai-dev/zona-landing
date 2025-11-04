@@ -3,7 +3,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { motion } from "framer-motion"
 import { cn } from "@/lib/utils"
 
 interface PricingFeature {
@@ -25,8 +24,6 @@ interface PricingCardProps {
   discountLabel?: string
   footnote?: string
 }
-
-const MotionCard = motion(Card)
 
 export const PricingCard = ({
   title,
@@ -50,15 +47,12 @@ export const PricingCard = ({
   const cadenceLabel = billingCycle === "monthly" ? "mes" : "año"
 
   return (
-    <MotionCard
-      layout
-      whileHover={{ y: -12 }}
-      transition={{ type: "spring", stiffness: 260, damping: 20 }}
+    <Card
       className={cn(
-        "group relative h-full border border-border/60 bg-card/90 backdrop-blur-sm transition-shadow",
+        "group relative h-full border border-border/60 bg-card/90 backdrop-blur-sm transition-all duration-300",
         isPopular
           ? "border-primary shadow-[0_20px_45px_-20px_rgba(59,130,246,0.45)]"
-          : "hover:shadow-[0_16px_40px_-24px_rgba(15,23,42,0.55)]"
+          : "hover:-translate-y-3 hover:shadow-[0_16px_40px_-24px_rgba(15,23,42,0.55)]"
       )}
     >
       {isPopular && (
@@ -111,7 +105,7 @@ export const PricingCard = ({
           {footnote && <p className="text-sm text-muted-foreground">{footnote}</p>}
         </div>
       </CardContent>
-    </MotionCard>
+    </Card>
   )
 }
 

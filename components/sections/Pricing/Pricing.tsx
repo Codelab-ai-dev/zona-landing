@@ -12,7 +12,6 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel"
 import PricingCard from "./PricingCard"
-import { AnimatePresence, motion } from "framer-motion"
 
 type BillingCycle = "monthly" | "yearly"
 
@@ -242,28 +241,19 @@ export const Pricing = () => {
               ))}
             </div>
           </div>
-          <AnimatePresence mode="wait">
-            <motion.ul
-              key={selectedPlan.title}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.25 }}
-              className="grid gap-4 md:grid-cols-3"
-            >
-              {selectedPlan.comparison.map((item) => (
-                <motion.li
-                  key={item}
-                  layout
-                  className="rounded-2xl border border-border/60 bg-background/60 p-4 text-sm text-muted-foreground"
-                  whileHover={{ scale: 1.03 }}
-                  transition={{ type: "spring", stiffness: 260, damping: 16 }}
-                >
-                  {item}
-                </motion.li>
-              ))}
-            </motion.ul>
-          </AnimatePresence>
+          <ul
+            key={selectedPlan.title}
+            className="grid gap-4 md:grid-cols-3 transition-opacity"
+          >
+            {selectedPlan.comparison.map((item) => (
+              <li
+                key={item}
+                className="rounded-2xl border border-border/60 bg-background/60 p-4 text-sm text-muted-foreground transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
+              >
+                {item}
+              </li>
+            ))}
+          </ul>
         </div>
 
         <div className="mt-16 space-y-6">
