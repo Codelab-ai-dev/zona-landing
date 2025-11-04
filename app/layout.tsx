@@ -10,6 +10,11 @@ export const metadata: Metadata = {
   description:
     "Organiza calendarios, arbitrajes y comunicación de tu liga con Zona-Gol, la plataforma integral para torneos deportivos.",
   generator: "v0.app",
+  icons: {
+    icon: "/images/zona-gol-logo.webp",
+    shortcut: "/images/zona-gol-logo.webp",
+    apple: "/images/zona-gol-logo.webp",
+  },
 }
 
 export default function RootLayout({
