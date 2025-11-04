@@ -43,7 +43,7 @@ const SectionReveal = ({ children, delay = 0 }: SectionRevealProps) => {
           }
         })
       },
-      { threshold: 0.2 }
+      { threshold: 0.1, rootMargin: "50px" }
     )
 
     observer.observe(element)
