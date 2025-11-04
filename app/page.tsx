@@ -1,6 +1,6 @@
 "use client"
 
-import { motion, useReducedMotion } from "framer-motion"
+import { useEffect, useRef, useState, type ReactNode } from "react"
 
 import { Header } from "@/components/sections/Header/Header"
 import { Hero } from "@/components/sections/Hero/Hero"
@@ -11,19 +11,60 @@ import { Contact } from "@/components/sections/Contact/Contact"
 import { CTA } from "@/components/sections/CTA/CTA"
 import { Footer } from "@/components/sections/Footer/Footer"
 import { ScrollToTop } from "@/components/sections/ScrollToTop/ScrollToTop"
+import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion"
+import { cn } from "@/lib/utils"
+
+type SectionRevealProps = {
+  children: ReactNode
+  delay?: number
+}
+
+const SectionReveal = ({ children, delay = 0 }: SectionRevealProps) => {
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const prefersReducedMotion = usePrefersReducedMotion()
+  const [isVisible, setIsVisible] = useState(false)
+
+  useEffect(() => {
+    if (prefersReducedMotion) {
+      setIsVisible(true)
+      return
+    }
+
+    const element = containerRef.current
+    if (!element) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true)
+            observer.disconnect()
+          }
+        })
+      },
+      { threshold: 0.2 }
+    )
+
+    observer.observe(element)
+
+    return () => observer.disconnect()
+  }, [prefersReducedMotion])
+
+  return (
+    <div
+      ref={containerRef}
+      className={cn(
+        "transition-all duration-700 ease-out will-change-transform",
+        prefersReducedMotion || isVisible ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"
+      )}
+      style={prefersReducedMotion ? undefined : { transitionDelay: `${delay}s` }}
+    >
+      {children}
+    </div>
+  )
+}
 
 export default function HomePage() {
-  const shouldReduceMotion = useReducedMotion()
-
-  const revealVariants = shouldReduceMotion
-    ? undefined
-    : {
-        initial: { opacity: 0, y: 48 },
-        animate: { opacity: 1, y: 0 },
-      }
-
-  const viewport = shouldReduceMotion ? undefined : { once: true, amount: 0.2 }
-
   return (
     <div className="min-h-screen bg-background text-foreground">
       <div className="relative isolate bg-background/80">
@@ -31,46 +72,21 @@ export default function HomePage() {
         <Hero />
       </div>
 
-      <motion.div
-        initial={revealVariants?.initial}
-        whileInView={revealVariants?.animate}
-        viewport={viewport}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      >
+      <SectionReveal>
         <Features />
-      </motion.div>
-      <motion.div
-        initial={revealVariants?.initial}
-        whileInView={revealVariants?.animate}
-        viewport={viewport}
-        transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
-      >
+      </SectionReveal>
+      <SectionReveal delay={0.1}>
         <Testimonials />
-      </motion.div>
-      <motion.div
-        initial={revealVariants?.initial}
-        whileInView={revealVariants?.animate}
-        viewport={viewport}
-        transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
-      >
+      </SectionReveal>
+      <SectionReveal delay={0.12}>
         <Pricing />
-      </motion.div>
-      <motion.div
-        initial={revealVariants?.initial}
-        whileInView={revealVariants?.animate}
-        viewport={viewport}
-        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-      >
+      </SectionReveal>
+      <SectionReveal delay={0.14}>
         <Contact />
-      </motion.div>
-      <motion.div
-        initial={revealVariants?.initial}
-        whileInView={revealVariants?.animate}
-        viewport={viewport}
-        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.12 }}
-      >
+      </SectionReveal>
+      <SectionReveal delay={0.16}>
         <CTA />
-      </motion.div>
+      </SectionReveal>
       <Footer />
       <ScrollToTop />
     </div>

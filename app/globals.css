@@ -75,9 +75,9 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-plus-jakarta);
-  --font-serif: var(--font-playfair);
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-sans: var(--font-geist-sans);
+  --font-serif: ui-serif, "Iowan Old Style", "Apple Garamond", "Times New Roman", serif;
+  --font-mono: var(--font-geist-mono);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
