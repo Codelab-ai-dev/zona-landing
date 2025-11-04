@@ -12,19 +12,12 @@ import { ScrollToTop } from "@/components/sections/ScrollToTop/ScrollToTop"
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-background">
-      {/* Background Image Container */}
-      <div
-        className="bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('/images/football-field-bg.png')" }}
-      >
-        {/* Dark overlay */}
-        <div className="bg-black/40">
-          <Header />
-          <Hero />
-        </div>
+    <div className="min-h-screen bg-background text-foreground">
+      <div className="relative isolate bg-slate-950">
+        <Header />
+        <Hero />
       </div>
-      
+
       <Features />
       <Testimonials />
       <Pricing />
