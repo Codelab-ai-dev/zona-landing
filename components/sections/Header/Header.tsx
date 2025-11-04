@@ -43,12 +43,12 @@ export const Header = ({ content }: HeaderProps) => {
     <header
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-all",
-        "border-transparent bg-slate-950/10 py-6 backdrop-blur-sm",
+        "border-transparent bg-slate-950/10 py-12 backdrop-blur-sm",
         isScrolled &&
-          "border-b border-white/10 bg-slate-950/80 shadow-lg shadow-slate-950/5 backdrop-blur-xl py-3"
+          "border-b border-white/10 bg-slate-950/80 shadow-lg shadow-slate-950/5 backdrop-blur-xl py-6"
       )}
     >
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto px-6 sm:px-8 lg:px-12">
         <div className="flex h-12 items-center justify-between gap-4">
           <Link href="#inicio" className="flex items-center">
             <Image
