@@ -9,18 +9,44 @@ export async function POST(request: NextRequest) {
     const { firstName, lastName, email, phone, organization, message } = body
 
     // Validación básica
-    if (!firstName || !lastName || !email || !organization || !message) {
+    if (!firstName || !email || !message) {
       return NextResponse.json(
         { error: "Todos los campos requeridos deben ser completados" },
         { status: 400 }
       )
     }
 
+    // Detectar el tipo de mensaje
+    const isEmailPrioritario = message.startsWith("[Email prioritario]")
+    const isVentas = message.startsWith("[Ventas]")
+    
+    // Determinar destinatario y tipo de mensaje
+    let recipientEmail = "admin@zona-gol.com"
+    let messageType = "Contacto General"
+    let headerColor = "#667eea"
+    let headerIcon = "⚽"
+    
+    if (isEmailPrioritario) {
+      recipientEmail = "admin@zona-gol.com"
+      messageType = "Email Prioritario"
+      headerColor = "#ef4444"
+      headerIcon = "🚨"
+    } else if (isVentas) {
+      recipientEmail = "admin@zona-gol.com"
+      messageType = "Consulta de Ventas"
+      headerColor = "#10b981"
+      headerIcon = "💼"
+    }
+
+    // Limpiar el mensaje del prefijo
+    const cleanMessage = message.replace(/^\[(Email prioritario|Ventas)\]\n\n/, "")
+    const fullName = lastName ? `${firstName} ${lastName}` : firstName
+
     // Enviar email usando Resend
     const { data, error } = await resend.emails.send({
       from: "Zona Gol <admin@zona-gol.com>", // Cambiar por tu dominio verificado
-      to: ["admin@zona-gol.com"], // Email donde quieres recibir los mensajes
-      subject: `Nuevo contacto de ${firstName} ${lastName} - ${organization}`,
+      to: [recipientEmail],
+      subject: `${messageType}: ${fullName}${organization ? ` - ${organization}` : ""}`,
       html: `
         <!DOCTYPE html>
         <html>
@@ -36,7 +62,7 @@ export async function POST(request: NextRequest) {
                 padding: 20px;
               }
               .header {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: ${headerColor};
                 color: white;
                 padding: 30px;
                 border-radius: 10px 10px 0 0;
@@ -52,11 +78,11 @@ export async function POST(request: NextRequest) {
                 padding: 15px;
                 background: white;
                 border-radius: 8px;
-                border-left: 4px solid #667eea;
+                border-left: 4px solid ${headerColor};
               }
               .label {
                 font-weight: 600;
-                color: #667eea;
+                color: ${headerColor};
                 font-size: 12px;
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
@@ -85,17 +111,17 @@ export async function POST(request: NextRequest) {
           </head>
           <body>
             <div class="header">
-              <h1 style="margin: 0; font-size: 24px;">⚽ Nuevo Contacto - Zona Gol</h1>
+              <h1 style="margin: 0; font-size: 24px;">${headerIcon} ${messageType} - Zona Gol</h1>
             </div>
             <div class="content">
               <div class="field">
                 <div class="label">Nombre Completo</div>
-                <div class="value">${firstName} ${lastName}</div>
+                <div class="value">${fullName}</div>
               </div>
               
               <div class="field">
                 <div class="label">Email</div>
-                <div class="value"><a href="mailto:${email}" style="color: #667eea; text-decoration: none;">${email}</a></div>
+                <div class="value"><a href="mailto:${email}" style="color: ${headerColor}; text-decoration: none;">${email}</a></div>
               </div>
               
               ${
@@ -103,20 +129,26 @@ export async function POST(request: NextRequest) {
                   ? `
               <div class="field">
                 <div class="label">Teléfono</div>
-                <div class="value"><a href="tel:${phone}" style="color: #667eea; text-decoration: none;">${phone}</a></div>
+                <div class="value"><a href="tel:${phone}" style="color: ${headerColor}; text-decoration: none;">${phone}</a></div>
+              </div>
+              `
+                  : ""
+              }
+              
+              ${
+                organization
+                  ? `
+              <div class="field">
+                <div class="label">Organización/Liga</div>
+                <div class="value">${organization}</div>
               </div>
               `
                   : ""
               }
               
               <div class="field">
-                <div class="label">Organización/Liga</div>
-                <div class="value">${organization}</div>
-              </div>
-              
-              <div class="field">
                 <div class="label">Mensaje</div>
-                <div class="message-box">${message}</div>
+                <div class="message-box">${cleanMessage}</div>
               </div>
               
               <div class="footer">
@@ -129,15 +161,15 @@ export async function POST(request: NextRequest) {
       `,
       // También enviar versión texto plano
       text: `
-Nuevo contacto desde Zona Gol
+${messageType} desde Zona Gol
 
-Nombre: ${firstName} ${lastName}
+Nombre: ${fullName}
 Email: ${email}
-Teléfono: ${phone || "No proporcionado"}
-Organización: ${organization}
+${phone ? `Teléfono: ${phone}` : ""}
+${organization ? `Organización: ${organization}` : ""}
 
 Mensaje:
-${message}
+${cleanMessage}
       `,
     })
 

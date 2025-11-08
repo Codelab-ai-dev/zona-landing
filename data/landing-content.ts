@@ -23,15 +23,17 @@ const fallbackData: LandingContent = {
     primaryAction: { label: "Solicitar demo en vivo", href: "#contacto" },
     secondaryAction: { label: "Ver demo interactiva", href: "https://admin.zona-gol.com" },
     stats: [
-      { value: "4.5K", label: "Partidos automatizados cada mes" },
-      { value: "35K", label: "Usuarios conectados en vivo" },
+      { value: "Hasta 100", label: "Partidos automatizados cada mes" },
+      { value: "Mas de 100", label: "Usuarios conectados en vivo" },
     ],
     schedule: {
       title: "Tu siguiente jornada en orden",
       matchLabel: "Próximo partido",
-      matchValue: "Sábado · 18:00 · Estadio Central",
+      matchValue: "Domingo · 8:00 · Liga dominical",
       checklist: [
-        { label: "Árbitros confirmados", statusLabel: "Listo", tone: "success" },
+        { label: "Asistencias", statusLabel: "Listo", tone: "success" },
+        { label: "Jornada Generada", statusLabel: "OK", tone: "success" },
+        { label: "Cedula de arbitros", statusLabel: "OK", tone: "success" },
         { label: "Notificaciones enviadas", statusLabel: "OK", tone: "success" },
       ],
     },
@@ -84,7 +86,7 @@ const fallbackData: LandingContent = {
             },
             {
               title: "Documentación",
-              description: "Verificación automática de credenciales",
+              description: "Verificación automática de credenciales con nuestra app Zona-Gol y QR de credenciales.",
               statusLabel: "En revisión",
               tone: "info",
             },
@@ -203,7 +205,7 @@ const fallbackData: LandingContent = {
     closing: {
       title: "Un ecosistema completo para tu liga",
       description:
-        "Integraciones con apps móviles, módulos financieros y herramientas de streaming mantienen a toda la comunidad conectada desde un mismo lugar.",
+        "Integracion con app móvil y herramientas de streaming mantienen a toda la comunidad conectada desde un mismo lugar(Proximamente).",
     },
   },
   testimonials: {
@@ -212,20 +214,20 @@ const fallbackData: LandingContent = {
     stats: [
       {
         label: "Ligas activas gestionadas",
-        value: 58,
+        value: 2,
         suffix: "+",
         description: "Comunidades que administran su temporada completa en Zona-Gol",
       },
       {
         label: "Partidos automatizados por temporada",
-        value: 1280,
+        value: 250,
         suffix: "+",
         duration: 1800,
         description: "Calendarios, resultados y notificaciones gestionados sin trabajo manual",
       },
       {
         label: "Tiempo administrativo ahorrado",
-        value: 35,
+        value: 60,
         suffix: "%",
         duration: 1500,
         description: "Reducción promedio del tiempo dedicado a tareas operativas",
@@ -339,12 +341,8 @@ const fallbackData: LandingContent = {
     carouselHeading: "Confían en Zona",
     carouselSubheading: "Ligas que ya modernizan su gestión",
     carouselItems: [
-      { name: "Liga Norte 360", context: "+12 clubes" },
-      { name: "Futsal Pro MX", context: "Streaming en vivo" },
-      { name: "Campus Premier", context: "Academias juveniles" },
-      { name: "Liga Andina", context: "4 sedes sincronizadas" },
-      { name: "Copa Master", context: "Patrocinios activos" },
-      { name: "Metropolitan League", context: "+45 arbitrajes" },
+      { name: "Liga Elite Soccer Guerreros Dominical", context: "+18 clubes" },
+      { name: "Liga Elite Soccer Guerreros Nocturna", context: "+18 clubes" },
     ],
   },
   contact: {

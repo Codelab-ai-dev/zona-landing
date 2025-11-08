@@ -17,6 +17,7 @@ interface QuickContactModalProps {
 interface FormData {
   name: string
   email: string
+  phone: string
   subject: string
   message: string
 }
@@ -25,6 +26,7 @@ export const QuickContactModal = ({ isOpen, onClose, type }: QuickContactModalPr
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
+    phone: "",
     subject: "",
     message: "",
   })
@@ -51,7 +53,7 @@ export const QuickContactModal = ({ isOpen, onClose, type }: QuickContactModalPr
           firstName: formData.name.split(" ")[0] || formData.name,
           lastName: formData.name.split(" ").slice(1).join(" ") || "",
           email: formData.email,
-          phone: "",
+          phone: formData.phone,
           organization: formData.subject,
           message: `[${type}]\n\n${formData.message}`,
         }),
@@ -62,7 +64,7 @@ export const QuickContactModal = ({ isOpen, onClose, type }: QuickContactModalPr
       }
 
       setSubmitStatus("success")
-      setFormData({ name: "", email: "", subject: "", message: "" })
+      setFormData({ name: "", email: "", phone: "", subject: "", message: "" })
 
       setTimeout(() => {
         onClose()
@@ -82,7 +84,7 @@ export const QuickContactModal = ({ isOpen, onClose, type }: QuickContactModalPr
       onClose()
       // Reset form after modal closes
       setTimeout(() => {
-        setFormData({ name: "", email: "", subject: "", message: "" })
+        setFormData({ name: "", email: "", phone: "", subject: "", message: "" })
         setSubmitStatus("idle")
       }, 300)
     }
@@ -133,6 +135,24 @@ export const QuickContactModal = ({ isOpen, onClose, type }: QuickContactModalPr
               className="border-border/40 bg-white/5 text-foreground placeholder:text-muted-foreground/70"
             />
           </div>
+
+          {type === "Ventas" && (
+            <div className="space-y-2">
+              <Label htmlFor="phone" className="text-sm font-medium text-foreground">
+                Teléfono
+              </Label>
+              <Input
+                id="phone"
+                type="tel"
+                placeholder="+52 33 1234 5678"
+                value={formData.phone}
+                onChange={handleChange}
+                required
+                disabled={isSubmitting}
+                className="border-border/40 bg-white/5 text-foreground placeholder:text-muted-foreground/70"
+              />
+            </div>
+          )}
 
           <div className="space-y-2">
             <Label htmlFor="subject" className="text-sm font-medium text-foreground">
