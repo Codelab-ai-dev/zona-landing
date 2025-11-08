@@ -364,16 +364,16 @@ const fallbackData: LandingContent = {
       channels: [
         {
           title: "Chat en vivo",
-          description: "Disponible de 9:00 a 22:00 (CDMX)",
+          description: "Disponible de 9:00 a 18:00 hrs (GDL)",
           action: "Abrir chat",
-          href: "https://zona-gol.com/chat",
+          href: "https://wa.me/523314341915?text=Hola,%20me%20gustaría%20información%20sobre%20Zona%20Gol",
           icon: "MessageCircle",
         },
         {
           title: "WhatsApp",
-          description: "+52 55 1234 5678",
+          description: "+52 33 1434 1915",
           action: "Enviar mensaje",
-          href: "https://wa.me/525512345678",
+          href: "https://wa.me/523314341915",
           icon: "PhoneCall",
         },
         {
@@ -384,11 +384,11 @@ const fallbackData: LandingContent = {
           icon: "Mail",
         },
         {
-          title: "Mesa de ayuda",
-          description: "Seguimiento de tickets críticos",
-          action: "Crear ticket",
-          href: "https://zona-gol.com/helpdesk",
-          icon: "Headset",
+          title: "Ventas",
+          description: "ventas@zona-gol.com",
+          action: "Contactar ventas",
+          href: "mailto:ventas@zona-gol.com",
+          icon: "Mail",
         },
       ],
       resolutionNote: "Escalamos incidentes críticos con ingenieros en menos de 30 minutos.",

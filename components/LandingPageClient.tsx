@@ -8,7 +8,6 @@ import { Features } from "@/components/sections/Features/Features"
 import { Testimonials } from "@/components/sections/Testimonials/Testimonials"
 import { Pricing } from "@/components/sections/Pricing/Pricing"
 import { Contact } from "@/components/sections/Contact/Contact"
-import { CTA } from "@/components/sections/CTA/CTA"
 import { Footer } from "@/components/sections/Footer/Footer"
 import { ScrollToTop } from "@/components/sections/ScrollToTop/ScrollToTop"
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion"
@@ -88,9 +87,6 @@ export const LandingPageClient = ({ content }: LandingPageClientProps) => {
       </SectionReveal>
       <SectionReveal delay={0.14}>
         <Contact content={content.contact} />
-      </SectionReveal>
-      <SectionReveal delay={0.16}>
-        <CTA content={content.cta} />
       </SectionReveal>
       <Footer />
       <ScrollToTop />
