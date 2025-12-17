@@ -19,13 +19,13 @@ export async function POST(request: NextRequest) {
     // Detectar el tipo de mensaje
     const isEmailPrioritario = message.startsWith("[Email prioritario]")
     const isVentas = message.startsWith("[Ventas]")
-    
+
     // Determinar destinatario y tipo de mensaje
     let recipientEmail = "admin@zona-gol.com"
     let messageType = "Contacto General"
     let headerColor = "#667eea"
     let headerIcon = "⚽"
-    
+
     if (isEmailPrioritario) {
       recipientEmail = "admin@zona-gol.com"
       messageType = "Email Prioritario"
@@ -124,27 +124,25 @@ export async function POST(request: NextRequest) {
                 <div class="value"><a href="mailto:${email}" style="color: ${headerColor}; text-decoration: none;">${email}</a></div>
               </div>
               
-              ${
-                phone
-                  ? `
+              ${phone
+          ? `
               <div class="field">
                 <div class="label">Teléfono</div>
                 <div class="value"><a href="tel:${phone}" style="color: ${headerColor}; text-decoration: none;">${phone}</a></div>
               </div>
               `
-                  : ""
-              }
+          : ""
+        }
               
-              ${
-                organization
-                  ? `
+              ${organization
+          ? `
               <div class="field">
                 <div class="label">Organización/Liga</div>
                 <div class="value">${organization}</div>
               </div>
               `
-                  : ""
-              }
+          : ""
+        }
               
               <div class="field">
                 <div class="label">Mensaje</div>
